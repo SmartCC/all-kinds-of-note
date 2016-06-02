@@ -1,0 +1,5 @@
+1、virtualBox装centos系统，安装时出现错误提示：
+    This kernel requires the following features not present on theCPU:
+    Unable to boot – please use akernel appropriate for your CPU.
+  解决方法：
+  虚拟系统——设置——系统——处理器——扩展特性------启用 PAE/NX

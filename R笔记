@@ -1,0 +1,25 @@
+1、rhdfs和rmr2 依赖的包c("rJava","reshape2","Rcpp","iterators","itertools","digest","RJSONIO","functional","bitops","caTools")
+
+2、rhdfs需要设置环境变量HADOOP_CMD和HADOOP_STREAMING,设置完成之后需要source 或者重启将环境变量加载进去
+
+3、出现安装XML失败，是由于没有安装libxml2或者libxml2-dev (redhat系列是libxml2-devel)，安装后即可使用。
+
+4、R作为脚本直接运行，在开头加上#!/usr/local/bin/Rscript
+
+5、R脚本读取标准流,创建一个文件file("stdin"),读取这个文件，如果直接使用stdin()是无法读取的
+
+6、sonw包:
+	（1）通过makeCluster或者make*cluster创建集群
+	（2)clusterApply执行向量计算，第二个参数必须是向量，能够通过[[]]获取， clusterExport向每个节点导出数据， clusterEvalQ在每个节点上执行表达式， clusterCall在每个节点上执行函数计算，与clusterApply的不同是后者的第二个参数必须是向量，clusterApplyLB是clusterApply的平衡版本,clusterMap也是clusterApply的一个版本， 类使用mapply与apply的关系
+	（3）关闭cluster使用stopCluster()
+	（4）parLapply、parSapply等类似与lapply、sapply等
+
+7、向量转化为list直接使用list（向量）即可，list转为向量使用unlist（list)
+
+8、数据框添加新列直接使用data.frame$col或者transform，删除列使其<-NULL即可
+
+9、R指定tcltk，之前需要安装tk-dev。在编译时添加参数--with-tcltk --with-tcl-config=/usr/lib/tcl8.6/tclConfig.sh --with-tk-config=/usr/lib/tk8.6/tkConfig.sh
+
+10、reshape2包主要两个函数:melt和_cast。
+	melt：第一个函数是将宽数据变为长数据，使用参数id.vars选定保留的变量，选定的列或作为保留，其余的项会变为variable的值（即列的名称），最后一列为value，为对应列的值，统计保留变量对variable的参数的数量。
+	_cast：使用cast可以把数据变成原样，也可以将数据进行透视分析。变回原样的方式 melt的id使用+号分割～variable。

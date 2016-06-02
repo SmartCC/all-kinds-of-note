@@ -1,0 +1,6 @@
+1、neo4j在查找关系的时候如果关系名为数字，直接查找会发生错误。如：
+	start n=node(1000) match n-[:0]->(m:BRANDID) return n,m;
+  可以使用反引号
+	 start n=node(1000) match n-[:`0`]->(m:BRANDID) return n,
+
+2、neo4j的节点随着格式会一直扩展，同最多的格式相同。

@@ -1,0 +1,3 @@
+1、python安装esay_install后，如果出现找不到python.h的情况，需要安装python2.x-dev
+
+2、easy_install安装时，可能会出现没有创建文件的权限的情况。可以使用sudo指令来解决

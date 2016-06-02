@@ -1,0 +1,63 @@
+reduce是对coll代表的seq做迭代式的运算，如下：
+
+	(reduce + [1 2 3 4]) ;; => (+ 4 (+ 3 (+ 1 2))) 
+	(reduce conj #{} [:a :b :c]) ;; => (conj (conj #{} :a) :b) :c)
+而apply的含义是调用f，并以args作为参数（如果args中含有seq，则首先拆散这个seq并将其中的每个element都当做一个参数），如下：
+
+(let [s ["str1" "str2" "str3"]]
+  (apply str s)) 
+	;; => (str "str1" "str2" "str3")
+	(apply + 1 2 '(3 4)) ;; => (+ 1 2 3 4)
+apply的作用是将一个列表直接作为函数的参数表调用，如
+
+(apply func [item1 item2 item3])
+
+等价于
+
+(func item1 item2 item3)
+
+但不等价于
+
+(reduce func [item1 item2 item3])
+
+事实上reduce的作用是将一个sequence的前两项应用func，将返回的结果在和第三项一起使用func，以此类推
+所以事实上
+
+(reduce func [item1 item2 item3])
+
+等价于
+
+(func (func item1 item2) item3)
+
+同时
+
+(reduce func [item1 item2 item3 item4])
+
+等价于
+
+(func (func (func item1 item2) item3) item4)
+
+所以说
+
+(apply + (range 5))
+
+等价于
+
+(+ 0 1 2 3 4 5)
+
+而
+
+(reduce + (range 5))
+
+等价于
+
+(+ 
+  (+ 
+    (+ 
+      (+ 
+        (+ 0 
+           1) 
+        2) 
+      3) 
+    4) 
+  5)

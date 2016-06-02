@@ -1,0 +1,61 @@
+1、安装方法参考官网的安装方法，现在网上的安装方法都有错误。
+
+2、1.x和2.x的路径有差别。如统计查询的count的包以前为cascalog.ops，现在放到了cascalog.logic.ops中。
+
+3、<-定义一个查询函数，不执行。
+    格式为:(<- [输出字段] (谓词列表))
+    谓词类型：
+	（1） 产生器(Generator)：数据源，其下层数据源可以是一个Cascading Tap(如HDFS上的一份数据)或另一个由<-定义的查询。
+	（2） 操作(Operator)： 定义在其他地方的输入变量的隐式关系，可以是绑定新变量的的函数（Function），或者是一个过滤器（filter）。操作一般在单个元组内起作用。
+	（3）累加器（Aggregators）：该函数根据元组创建数据的聚合结果。比如count，sum，min，max，等等
+  ?-宏执行<-定义的查询。
+    格式为：(?- (输出tap) (<-定义的查询))
+  ?<-其实是对 <-（创建查询的操作符） 和 ?-（执行查询的操作符） 的包装。
+
+4、(stdout) 会创建一个 Cascalog 的 tap，这个 tap 在查询结束之后把内容写到标准输出。任意的 Cascalog tap 都可以作为输出，也就是说，你可以把输出的数据写到任意的文件格式（如 Sequence file， 普通文本，等等）。
+
+5、:> 关键字用来分隔输入变量和输出变量，如果没有指定 :> 关键字，则变量会被当做操作（operations）的输入或者生成器（generators）和累加器（aggregators）的输出。
+   如：
+     (?<- (stdout) [?name ?young] (age ?name ?age) (< ?age 30))
+   结果为：
+     RESULTS
+     -----------------------
+     alice
+     david
+     emily
+     gary
+     kumar
+
+   使用:> 关键字
+     RESULTS
+     -----------------------
+     alice	true
+     bob	false
+     chris	false
+     david	true
+     emily	true
+     george	false
+     gary	true
+     kumar	true
+     luanne	false
+   结果作为一个boolean保留了下来。
+
+   同样还有输入关键字 :<，用来定义输入。如定义函数
+   (require '[cascalog.logic.def :as def])
+
+   (def/defmapcatfn tokenise [line]
+     "reads in a line of string and splits it by a regular expression"
+      (clojure.string/split line #"[\[\]\\\(\),.)\s]+"))
+
+   (?- (stdout)
+    (<- [?word]
+        (sentence :> ?line)
+        (tokenise :< ?line :> ?word)))
+   :<关键字之后的参数为函数 tokenise的输入
+
+6、自定义操作
+  defmapcatop 定义的操作输出 0 个或多个元组。
+  deffilterop 定义返回布尔值的过滤操作，表示这个元组会不会被过滤掉。
+  defmapop 定义的函数只返回一个元组。
+  defaggregateop 定义一个累加器。
+  也可以直接使用纯Clojure编写的函数。当这个函数不包含输出变量时，会被作为过滤条件来执行；当包含一个返回值时，则会作为defmapop来解析。而对于返回0个或多个元组的函数，则必须使用defmapcatop来定义。

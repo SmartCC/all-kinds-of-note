@@ -1,0 +1,3 @@
+1、hama出现Error reading task outputhttp://localhost:40015/tasklog?plaintext=true&taskid=attempt_201408131040_0010_000000_0&filter=stdout错误，是hama的服务端口出现了问题，无法访问，只用重新启动hama即可
+
+2、查看hama端口 http://localhost:40015

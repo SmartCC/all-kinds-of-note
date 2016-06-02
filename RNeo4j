@@ -1,0 +1,17 @@
+1、RNeo4j 连接数据库的时候，需要提供用户名，否则报302错误
+> graph<-startGraph("http://localhost:7474/db/data")
+错误: 302 Found
+
+> graph<-startGraph("http://localhost:7474/db/data/",username="root")
+成功
+
+2、添加节点的时候给节点设置上Label，给节点打上标签，这样在以后的查找过程中就可以根据标签进行查找。
+
+3、通过addConstraint函数给标签加上限制，确保标签必定含有某个字段（添加限制的字段内容不能相同）。此外，添加限制后的节点可以使用getUniqueNode函数直接查找，相当于直接使用索引。
+
+4、使用RNeo4j查询数据库的时候，返回值要使用指定具体的项，不能直接返回对象。如节点的属性(node {id=1,name="2"})，则写cypher语句为:					 start n=node(*) return n;
+会报错。因为R接收的是一个数据库data.frame。对象无法转换成数据库。正确的写法为：
+  start n=node(*) return n.id as id;
+
+5、neo4j的属性名复制/剪贴
+  match (n:BRANDID)  set n.bid=n.id remove n.id return n;

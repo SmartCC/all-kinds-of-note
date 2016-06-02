@@ -1,0 +1,26 @@
+1、emacs进入交互界面后输入命令执行，使用方向键只能上下左右的在文本中移动。如果需要翻看输入的历史，使用M-p(向前翻)和M-n（向后翻）来查看历史记录
+
+2、切换窗口 C-x o，o表示other。列出缓冲区C-x C-b。切换缓冲区C-x b。
+
+3、在原有的地方插入一行C-o，原来的行自动跳到下一行。在原来到地方插入下面一行C+j。
+
+4、分割方式：c-x 2 水平分割 c-x 3 竖直分割
+
+5、安装window-numbering，每个窗口都会有编号，直接使用M+编号就可跳转到相应的窗口。
+
+6、edit operator
+	select	C+@
+  	copy 	M+w
+  	cut 	C+w
+  	paste	C+y
+
+7、普通的shell只能开启一个，可以通过命令C-u M-x shell启动，并输入buffer名，即可启动一个新的shell
+
+8、emacs命令行启动 ：emacs -nw 文件名
+
+9、添加文件导航树neotree
+	;下载git clone https://github.com/jaypei/emacs-neotree.git neotree
+	(add-to-list 'load-path "~/.emacs.d/neotree")
+	(require 'neotree)
+	;设置快捷键
+	(global-set-key [f8] 'neotree-toggle)

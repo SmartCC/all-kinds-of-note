@@ -1,0 +1,115 @@
+1、 interpose是接收一个分隔符和一个序列，将序列插入到低序列的中间。
+    interleave是接收两个序列，将序列相互交叉，长度以最短的序列长度为准。
+    
+2、 匿名函数也可以重载，如：
+    (fn a 
+    	([] (println "hi"))
+	([x] (println x)))
+
+3、 （1）reify创建一个匿名类。
+     (str (let [f "foo"] 
+        (reify Object 
+     	    (toString [this] f))))
+
+      == "foo"
+
+    (seq (let [f "foo"] 
+        (reify clojure.lang.Seqable 
+          (seq [this] (seq f)))))
+  
+    == (\f \o \o))
+
+  同时也可以使用proxy创建匿名类。proxy同reify的区别是前者可以添加新的函数，后者不能。
+  （2）创建接口可以使用defprotocol，如
+	(defprotocol IBark (bark [this]))
+     使用reify创建调用
+	(bark (reify IBark (bark [this] (println "bark"))))
+  （3） reify、proxy创建的是匿名类，defrecord、deftype创建的是剧名类。
+  （4） 使用extend-protocol函数可以对现有的类进行扩展，如
+  	(extend-protocol IBark
+	    java.util.Map
+	    (bark [this]
+	        (or (:bark this)
+		    (get this "bark"))))
+       直接将一个原有的java类扩展新的接口。
+  (5)因为函数第一个参数是对象本身，类似与java里的this，故defprotocol函数定义的接口的第一个参数名记为this（只调用对象本身）。
+
+4、 在lazy-seq函数中，使用cons为数组形式，如([1 2] [1 2 3] [1 2 3 4])；使用conj是嵌套形式，如(1 2 (1 2 3 (1 2 3 4 ())))。
+
+5、 取map的value值，使用vals，取key值为keys。在使用map函数是也可使用#(nth % 2)取
+
+6、 partition-by与group-by函数类似，只是group-by是对全局进行分组，partition-by是局部分组。如：
+    (group-by #(rem % 3) [1 1 1 3 3 4 5 5 1 1])
+    == {1 [1 1 1 4 1 1], 0 [3 3], 2 [5 5]}
+
+   (partition-by #(rem % 3) [1 1 1 3 3 4 5 5 1 1])
+   == ((1 1 1) (3 3) (4) (5 5) (1 1))
+
+7、for 后面的方括号是一个vector，r是xml-seq返回的sequence，x是sequence中的元素，每次循环都自动获取下一个元素，:when(...)是条件判断语句。当when(...)返回true的时候就执行vector后面的表达式，因为这里仅仅是x,所以将这个符号条件的元素作为for的返回值。
+    user=> (for [x r :when (= :mongodb (:tag x))] x)  
+    ({:tag :mongodb, :attrs nil, :content [{:tag :uri, :attrs nil, :content ["localhost"]}]})  
+    user=>   
+ :when 不会阻止循环提前结束，但是:while就不同了。
+ 如果:while(...) 计算出结果为false，则循环立刻退出。
+ 所以下面返回空list
+ user=> (for [x r :while (= :mongodb (:tag x))] x)  
+ ()
+
+8、some函数提供了类似R中any的功能（更强大）,all对应的是every?，此外还有not-any?等函数。
+
+9、case中的选项可以使用括号括起来，指定同一个答案。如:
+    #(case %
+        1 true
+	2 true
+	3 true
+	4 false
+	5 false)
+   可以写成:
+   #(case % (1 2 3) true (4 5) false) 选项的列表之前不加'。
+
+10、定义命名空间的ns宏，其中有一批指令： :exclude :only :as :refer-clojure :import :use :load :require。例子：
+  (ns joy.ns-ex
+    ;排查clojure.core里的defstruct
+    (:refer-clojure :exclude [defstruct])
+    ;没有命名空间限定的情况下使用set和xml
+    (:use (clojure set xml))
+    ;没有命名空间限定的情况下使用test的are和is，其他函数不导入
+    (:use [clojure.test :only (are is)])
+    ；加载命名空间，同时赋予别名z
+    (:require (clojure [zip :as z]))
+    ；导入java类Date和File，也可导入deftype和defrecord定义的类
+    (:import (java.util Date)
+    	     (java.io File)))
+
+    注：一般情况下不用使用:use导入全部命名空间的数据，需要使用是要使用:only限定。否则影响效率。
+
+11、对应clojure中的tree数据结构，使用clojure.zip里的函数进行操作。
+
+12、	组合函数 comp。从后向前依次调用  
+	偏态函数partial。 构建一个函数，第一个参数是函数名，其余的参数是函数的参数
+	反函数complement。 构建一个函数的反函数
+
+13、使用正则查找
+	#加字符串构成一个正则化，类型是java.util.regex.Patten
+	可以使用re-find函数查找，如(re-find #"Hi" "Hi,wo,Hi") => "Hi"
+	re-matcher可以进行matcher匹配
+
+12、关键字不属于任何命名空间，但可以对关键字进行限定。
+	如：
+	    :t => :t
+	    ::t => :user/t
+	全限定关键字的命名空间可以不存在，但在所限定的命名空间之外使用时，需要加上命名空间。
+	全限定关键字使用是开始也是两个冒号::t或者:命名空间/关键字 :user/t。::t同:t不是一个关键字
+	（详细讲解见《clojure编程乐趣》 p69 4.3.2全限定关键字
+
+13、dorun 对产生副作用的函数，重复求值惰性序列，类似于take。
+	(def infinity-hi (repeatedly #(println "hi")))
+	(dorun 5 infinity-hi)
+
+14、iterate 产生一个(f x) (f (f x)) (f (f (f x))) ……的惰性序列
+
+15、使用gen-interface可以声明一个java接口。
+
+16、函数的参数为java的数组类型是，可以使用#=(java.lang.Class/forName "[×")来声明。如对应java函数 void a(byte[] bs)，clojure的声明为 [a [#=(java.lang.Class/forName "[B")] void]
+
+

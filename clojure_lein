@@ -1,0 +1,9 @@
+project.clj文件配置项：
+    source-paths: 该属性指定了包含clojure源代码的目录
+    java-source-paths: 该属性指定了Java源代码的目录
+    test-paths: 该属性指定了clojure测试目录
+    javac-options: 该属性指定java编译器的选项
+    repositories: 该属性列出了作为依赖项源的外部仓库，包括clojar仓库和Maven中央仓库
+    dependencies: 该属性列出了依赖项，依赖项的语法规则为[groupID/atrifactID "version"]
+    profiles: 通过该属性来指定开发过程中需要使用的各种属性
+    

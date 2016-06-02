@@ -1,0 +1,17 @@
+source-paths:该属性指定了包含Clojure源代码的目录
+
+java-source-paths:该属性指定了包含java源代码的目录，包括主文件目录和测试目录
+
+test-paths:该属性指定了包含Clojure测试目录
+
+javac-options:该属性指定了java编译器选项
+
+repositories:该属性列出了作为依赖项源的外部仓库，包括Clojar仓库和Maven中央仓库
+
+dependencies:该属性指定了依赖项，依赖项语法规则为[groupID/artifactId "version"]
+
+profiles: 通过该属性指定开发过程中所需要的各种属性。如有些包只需要编译使用，不需要将其打包到发布的程序里，可以:profiles {:dev {:dependencies [storm "0.8.2"]}}，或者添加开发插件  :profiles {:dev {:plugins [[cider/cider-nrepl "0.8.2"]]}。
+
+lein 1.x的profiles在配置中对某些不打包大的依赖文件是会有编译错误，可以将其添加到:dev-dependencies项中。在使用lein pom命令中，lein 1.x也不能将profile的配置写入pom.xml文件中（lein2.x)以上问题都不存在。
+
+aot(“Ahead-of-time Compile”,预先编译),编译过程是在程序启动前完成，即编译打包完即可看到class文件（不加该选项的话只要在程序被加载运行的时候才会动态的编译为字节码，即jar包里看到的是clj文件，没有class文件）。:aot的值有:all，其余的还不知道。

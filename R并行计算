@@ -1,0 +1,15 @@
+使用foreach包完成并行计算
+foreach(参数)%dopar%{具体的计算公式}
+使用doMC家族：doMC, doSNOW, doMPI, doRedis, doSMP和foreach packages.
+
+如果有全局变量，需要在foreach外面设置，否则foreach会选取长度最短的变量当做迭代的长度运行。如：
+（1）a的长度为1
+> foreach(i=1:4,a=3,.combine=c)%dopar%{i^2+a}
+[1] 4
+（2）a向量的长度为3
+> foreach(i=1:4,a=rep(3,3),.combine=c)%dopar%{i^2+a}
+[1]  4  7 12
+(3）a为外部向量
+> a=4
+> foreach(i=1:4,.combine=c)%dopar%{i^2+a}
+[1]  5  8 13 20

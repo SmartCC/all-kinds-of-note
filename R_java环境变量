@@ -1,0 +1,12 @@
+1、sudo后的用户不能得到当前用户的环境变量
+解决方法：
+	在/etc/sudoers中修改：
+	Defaults    env_reset
+	为：
+	Defaults    !env_reset
+	这样，任何环境变量都可以通过sudo传进去了
+
+2、在R中查看环境变量
+解决方法：
+	Sys.getenv("JAVA_HOME")
+	Sys.setenv(JAVA_HOME="/bin/ksh")

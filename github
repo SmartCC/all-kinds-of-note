@@ -1,0 +1,16 @@
+
+git config --global user.name "shaochunchang"
+git config --global user.email "shaochunchang@rd.tuan800.com"
+
+echo "# 4clojure-answers" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/SmartCC/4clojure-answers.git
+git push -u origin master
+如果推送出现：提示：更新被拒绝，因为您当前分支的最新提交落后于其对应的远程分支
+则使用命令：
+git push -u origin +master
+
+git同步远程服务器代码
+git pull

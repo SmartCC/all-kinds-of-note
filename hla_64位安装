@@ -1,0 +1,24 @@
+1.首先安装ia32-libs：apt-get install ia32-libs;
+
+2.下载好HLA安装包，然后将其解压到特定的目录
+
+3.配置好环境变量：
+
+[plain] view plaincopyprint?
+
+    PATH="$PATH:/home/gentoo/HLA/usr/hla/"  
+    hlalib="/home/gentoo/HLA/usr/hla/hlalib"  
+    hlainc="/home/gentoo/HLA/usr/hla/include"  
+    hlatmp="/home/gentoo/HLA/usr/hla/tmp"  
+      
+    export PATH  
+    export hlalib  
+    export hlainc  
+    export hlatmp  
+
+
+4.hla只能处理32位的程序，在64位条件下会编译失败。要在64位条件下使用。编译时记得加上：
+
+    hla -lmelf_i386 xxx（你的HLA代码）  
+    或者在/etc/profile文件中，使用alias创建别名，添加：
+	alias hla64="hla -lmelf_i386"

@@ -1,0 +1,12 @@
+问题1、compiling:(jackknife/seq.clj:12)错误
+原因：clojure 1.3.0 版本太老
+解决方法：使用 clojure 1.6.0
+
+问题2、 compiling:(api.clj:1:1)/compiling:(vars.clj:1:1)错误
+原因：that's a bug in the clojure compiler. when you try to AOT a namespace were that warning about var clashes happens, the compiler bites the dust.
+解决方法：使用jackknife 1.7.0
+
+问题3、ClassNotFoundException: org.apache.hadoop.fs.FileSystem, compiling:(core.clj:1:1)
+原因：找不到hadoop的hdfs文件
+解决方法：添加:profiles { :dev {:dependencies [[org.apache.hadoop/hadoop-core "1.1.2"]]}}到project.clj文件。（后续实验在打包的时候依旧会出现这个问题，需要在:dependencies后面添加）
+注：:dev-dependencie与:profiles添加的库结果不同，

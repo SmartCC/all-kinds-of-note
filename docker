@@ -1,0 +1,6 @@
+1、docker pull 镜像名，获取相应的镜像
+
+2、docker -t -i run 镜像名
+  运行镜像，其中-t讲启动一个终端（terminal），-i时指定输入(input)
+
+3、-v 宿主文件路径:docker文件路径，可以绑定一个宿主文件作为docker的文件，文件中的更改将立即反应到磁盘里

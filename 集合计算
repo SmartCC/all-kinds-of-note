@@ -1,0 +1,10 @@
+java:
+	使用set作为java集合操作的基础
+	set.retainAll(set)求并集
+	set.removeAll(set)求差集
+	set.addAll(set)求交集
+
+R:
+	union(x,y) 并集
+	intersect(x,y) 交集
+	setdiff(x,y) 差集x-y

@@ -1,0 +1,31 @@
+ 无法载入X11字面为1,大小为16的字形-adobe-helvetica-%s-%s-*-*-%d-*-*-*-*-*-*-* 解决办法
+
+ f you recieve such messages in console:
+ Received X Intrinsics Warning <Cannot convert string "-adobe-helvetica-medium-r-normal-*-*-120-75-75-*-*-*" to type FontStruct
+ and other such messages, and Gambit crashes after trying to mesh (for example:
+		volume mesh volume.1 tetrahedral
+)
+then, install some packages: (Ubuntu, insert these lines in console - bash)
+
+sudo apt-get install xfonts-75dpi
+sudo apt-get install xfonts-100dpi
+sudo apt-get install mesa-utils
+sudo apt-get install libxtst-dev
+
+Then edit xorg.conf;
+sudo nano /etc/X11/xorg.conf
+
+insert these strings:
+
+Section "Files"
+   FontPath        "/usr/share/X11/fonts/misc"
+   FontPath        "/usr/share/X11/fonts/cyrillic"
+   FontPath        "/usr/share/X11/fonts/100dpi"
+   FontPath        "/usr/share/X11/fonts/75dpi"
+EndSection
+
+press Ctrl-O to save, ENTER. Then Ctrl-X to quit "nano" text editor.
+
+At last, execute this line:
+sudo dpkg-reconfigure -phigh xserver-xorg
+and restart your computer. (you can restart only xserver  if you don't want to restart your computer)

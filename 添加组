@@ -1,0 +1,3 @@
+usermod -a -G groupA user，groupA是组名，user是添加的用户
+不要使用usermod -G groupA user，会使用户离开原来的组
+查看用户所属的组：groups user 或者查看文件/etc/group

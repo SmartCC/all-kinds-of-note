@@ -1,0 +1,1 @@
+1、wine启动ie浏览器：wine 'C:\Program Files\Internet Explorer\iexplore'

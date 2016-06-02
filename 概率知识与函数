@@ -1,0 +1,5 @@
+1、正态分布的函数
+    dnorm，获取正态分布的密度函数，密度为相应的横坐标值，概率上常用PDF来表示。incanter中的函数为pdf-normal
+    pnorm，获取正态分布的累计密度函数，即相应面积的积分，概率上常用CDF来表示，所以的积分面积总和为1。incanter中的函数为cdf-normal
+    qnorm，获取累计分布函数的分位数，即pnorm的逆函数，相应的概率积分面积求其分位数incanter中的函数为quantile-normal
+    rnorm，获取n个正态分布的数据。incanter中的函数为sample-normal

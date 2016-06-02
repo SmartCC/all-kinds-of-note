@@ -1,0 +1,2 @@
+1、maven创建一个工程
+	mvn archetype:create -DgroupId=com.jizg -DartifactId=testMaven

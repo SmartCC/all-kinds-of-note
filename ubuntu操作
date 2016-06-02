@@ -1,0 +1,5 @@
+1、udo locate libjvm.so 查找动态库的位置
+
+2、xrandr 查看显示器的分辨率
+
+3、ubuntu没有声音。把当前用户加到audio去,sudo usermod -a -G audio 用户名。在/etc/modprobe.d/alsa-base.conf文件最后加上  options snd-hda-intel model=auto
