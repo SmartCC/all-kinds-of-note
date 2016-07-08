@@ -15,3 +15,5 @@ profiles: 通过该属性指定开发过程中所需要的各种属性。如有�
 lein 1.x的profiles在配置中对某些不打包大的依赖文件是会有编译错误，可以将其添加到:dev-dependencies项中。在使用lein pom命令中，lein 1.x也不能将profile的配置写入pom.xml文件中（lein2.x)以上问题都不存在。
 
 aot(“Ahead-of-time Compile”,预先编译),编译过程是在程序启动前完成，即编译打包完即可看到class文件（不加该选项的话只要在程序被加载运行的时候才会动态的编译为字节码，即jar包里看到的是clj文件，没有class文件）。:aot的值有:all，其余的还不知道。
+
+:dev和:provided的差别：:dev对应pom文件的test，只在测试时有用。:provided对应pom文件的provided，在编译和测试时都有用，打包时不包含进来。

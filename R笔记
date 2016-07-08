@@ -23,3 +23,21 @@
 10、reshape2包主要两个函数:melt和_cast。
 	melt：第一个函数是将宽数据变为长数据，使用参数id.vars选定保留的变量，选定的列或作为保留，其余的项会变为variable的值（即列的名称），最后一列为value，为对应列的值，统计保留变量对variable的参数的数量。
 	_cast：使用cast可以把数据变成原样，也可以将数据进行透视分析。变回原样的方式 melt的id使用+号分割～variable。
+
+11、rredis插入数据出现乱码。
+	#插入数据
+	redisSet('R', 'Greetings, shell client!')
+	    [1] "OK"
+
+	#读取数据(有乱码)
+	redis 127.0.0.1:6379> get R
+	    "X\\x00\x00\x00\x02\x00\x02\x0f\x00\x00\x02\x03\x00\x00\x00\x00\x10\x00\x00\x00\x01\x00\x04\x00\\x00\x00\x00\x18Greetings, shell client!"
+	
+	转型以数组方式存储(charToRaw)
+	
+	redisSet('R', charToRaw('Greetings, shell client!'))
+	    [1] TRUE
+
+	#正常读取数据
+	redis 127.0.0.1:6379> get R
+	    "Greetings, shell client!"
