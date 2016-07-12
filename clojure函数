@@ -113,3 +113,6 @@
 16、函数的参数为java的数组类型是，可以使用#=(java.lang.Class/forName "[×")来声明。如对应java函数 void a(byte[] bs)，clojure的声明为 [a [#=(java.lang.Class/forName "[B")] void]
 
 17、clojure使用gensym函数可以创建变量
+
+18、配置clojure的开发选项，只在编译时有用
+	:profiles {:provided {:dependencies [[..]]}}
