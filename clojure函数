@@ -116,3 +116,13 @@
 
 18、配置clojure的开发选项，只在编译时有用
 	:profiles {:provided {:dependencies [[..]]}}
+
+19、定义函数，使用keyword。
+	(1)直接定义
+		(defn f [a {:keys [b c d] :or {b 1}}] b)
+		调用的时候为: (f 1 {:b 1 :c 2 :d 3})
+		注意：后边的{:b 1 :c 2 :d 3}不能省略，因为参数需要一样多
+	(2)使用可变参数
+		(defn f [a & {:keys [b c d] :or {b 1}}] a)
+		调用的时候为： (f 1) 或者 (f 1 :b 1 :c 2 :d 3)
+		后边的可以省略，且不需要写出map，因为&符会把后边的全部变成序列
