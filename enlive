@@ -1,0 +1,6 @@
+1、使用选择器时，选择器的第一个中括号为选择器列表，其里边的值为选择器。如果需要取选择的对象做合区，需要嵌套中括号。
+	user> (sniptest "<p class=\"\"><a href=\"\" class=\"\"></a></p>" [[:p (attr? :class)]] (content "XXX"))
+	"<p class=\"\">XXX</p>"
+
+	user> (sniptest "<p class=\"\"><a href=\"\" class=\"\"></a></p>" [:p (attr? :class)] (content "XXX"))
+	"<p class=\"\"><a href=\"\" class=\"\">XXX</a></p>"
