@@ -1,2 +1,4 @@
 1、maven创建一个工程
 	mvn archetype:create -DgroupId=com.jizg -DartifactId=testMaven
+使用maven3及其以上版本时，使用命令generate替换掉create
+	mvn archetype:generate -DgroupId=com.lingban -DartifactId=testMaven
