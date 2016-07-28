@@ -126,3 +126,10 @@
 		(defn f [a & {:keys [b c d] :or {b 1}}] a)
 		调用的时候为： (f 1) 或者 (f 1 :b 1 :c 2 :d 3)
 		后边的可以省略，且不需要写出map，因为&符会把后边的全部变成序列
+
+20、clojure中通过import引入的类直接使用类名的话同java中类调.class函数相同，例如：
+    (import 'java.lang.Math)
+    Math
+    同 Math.class相同
+
+21、丢掉最后一个元素butlast和drop-last
