@@ -1,6 +1,11 @@
-1、使用选择器时，选择器的第一个中括号为选择器列表，其里边的值为选择器。如果需要取选择的对象做合区，需要嵌套中括号。
+1、使用选择器时，选择器的第一个中括号为选择器列表，其里边的值为选择器。如果需要取选择的对象做合取，需要嵌套中括号。
 	user> (sniptest "<p class=\"\"><a href=\"\" class=\"\"></a></p>" [[:p (attr? :class)]] (content "XXX"))
 	"<p class=\"\">XXX</p>"
 
 	user> (sniptest "<p class=\"\"><a href=\"\" class=\"\"></a></p>" [:p (attr? :class)] (content "XXX"))
 	"<p class=\"\"><a href=\"\" class=\"\">XXX</a></p>"
+
+2、使用select选择相应的节点，格式为(select node-or-nodes 选择器）
+
+3、使用pred和zip-pred创建高阶函数来定义自己的选择器。
+    选择器返回值为boolen类型，返回true通过选择，false不通过
