@@ -113,6 +113,12 @@
 16、函数的参数为java的数组类型是，可以使用#=(java.lang.Class/forName "[×")来声明。如对应java函数 void a(byte[] bs)，clojure的声明为 [a [#=(java.lang.Class/forName "[B")] void]
 
 17、clojure使用gensym函数可以创建变量
+    user=> (defmacro a [xs] (let [x (repeatedly 2 gensym )] `(for [~@(interleave x xs)] [~@x])))
+    #'user/a
+    user=> (macroexpand-1 '(a [[1 2] [3 4]]))
+    (clojure.core/for [G__10646 [1 2] G__10647 [3 4]] [G__10646 G__10647])
+    user=> (a [[1 2] [3 4]])
+    ([1 3] [1 4] [2 3] [2 4])
 
 18、配置clojure的开发选项，只在编译时有用
 	:profiles {:provided {:dependencies [[..]]}}

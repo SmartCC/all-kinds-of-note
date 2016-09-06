@@ -1,0 +1,5 @@
+1、错误：Exception in thread "main" java.lang.RuntimeException: No such var: bapi/build, compiling:(cljsbuild/compiler.clj:60:11)
+     原因：clojurescript的版本和lein-cljsbuild的版本不匹配。
+     解决方案：修改clojurescript配置。
+        （1）如果org.clojure/clojurescript 的版本低于0.0-3xxx，则lein-cljsbuild使用0.2.7
+        （2）如果clojurescript版本高于0.0-3xxx，则使用lein-cljsbuild 1.1.4
