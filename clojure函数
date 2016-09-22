@@ -139,3 +139,18 @@
     同 Math.class相同
 
 21、丢掉最后一个元素butlast和drop-last
+
+22、将字符串转换为clojure变量，实现反序列化的过程可以使用read-string函数。
+    user=> (+ 11 (read-string "9"))
+    20
+    user=> (read-string "(+ 1 2)")
+    (+ 1 2)
+    如果想要执行PersistenList，可以使用eval命令就可以执行.
+    user=> (eval (read-string "(+ 1 2)"))
+    3
+
+23、对于clojure中的PersistenList,可以使用eval命令执行：
+    user=> (eval '(+ 1 2)
+    3
+    user=> (eval (read-string "(+ 1 2)"))
+    3
