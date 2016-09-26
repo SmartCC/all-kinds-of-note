@@ -154,3 +154,7 @@
     3
     user=> (eval (read-string "(+ 1 2)"))
     3
+
+24、map中选择多个key，使用select-keys函数，用法(select-keys map keyseq)，结果为一个map。
+    user=> (select-keys {:a 1 :b 2 :c 3 :d 4} [:a :b])
+    {:a 1, :b 2}
