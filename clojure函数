@@ -158,3 +158,9 @@
 24、map中选择多个key，使用select-keys函数，用法(select-keys map keyseq)，结果为一个map。
     user=> (select-keys {:a 1 :b 2 :c 3 :d 4} [:a :b])
     {:a 1, :b 2}
+
+25、对于要求结果的惰性函数，使用doall来求值，不要使用dorun，dorun的返回结果为nil
+    user=> (dorun (pmap inc (range 4)))
+    nil
+    user=> (doall (pmap inc (range 4)))
+    (1 2 3 4)
