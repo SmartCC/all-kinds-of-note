@@ -2,3 +2,38 @@
 	mvn archetype:create -DgroupId=com.jizg -DartifactId=testMaven
 使用maven3及其以上版本时，使用命令generate替换掉create
 	mvn archetype:generate -DgroupId=com.lingban -DartifactId=testMaven
+
+2、maven编译clojure
+    在pom文件中添加下列内容
+    <plugin>
+        <groupId>com.theoryinpractise</groupId>
+        <artifactId>clojure-maven-plugin</artifactId>
+        <version>1.8.1</version>
+        <configuration>
+          <sourceDirectories>
+            <sourceDirectory>src/clj</sourceDirectory>
+          </sourceDirectories>
+          <testSourceDirectories>
+            <testSourceDirectory>test</testSourceDirectory>
+          </testSourceDirectories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+
+3、maven 安装jar包到本地仓库
+    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=jar包路径
+      </plugin>
