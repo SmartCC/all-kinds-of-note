@@ -164,3 +164,18 @@
     nil
     user=> (doall (pmap inc (range 4)))
     (1 2 3 4)
+
+26、gen-class使用的几个问题：
+    （1）如果返回的时数组，类型可以直接写成"[D"等类型;
+    （2）导出函数需要在gen-class中使用:methods
+    （3）导出的函数原型要比:methods中的函数多一项，即在总前面加指向本身的this
+    例子：
+	(ns test-gen.core
+	  (:gen-class
+	   :name testGen.TestGen
+	   :methods [[testGen [] "[D"]]))
+	
+	(defn -testGen
+	  [this]
+	  (double-array [1 2 3 4]))
+
