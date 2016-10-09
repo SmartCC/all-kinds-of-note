@@ -179,3 +179,4 @@
 	  [this]
 	  (double-array [1 2 3 4]))
 
+    如果参数类型为别别的数组，如Object[]、String[]，则类型我"[Ljava.lang.Object;"、"[Ljava.lang.String;"。methods后边为:methods [[testGen [] "[java.lang.Ojbect;"]]
