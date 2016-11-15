@@ -1,0 +1,5 @@
+1、emacs编译的时候可能确实必要的图像库，如果不希望使用界面，可以在configure是运行如下命令：
+  ./configure --without-x
+
+2、emacs编译x-window界面，需要先安装必要的库
+ sudo apt-get install build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev libxpm-dev automake autoconf

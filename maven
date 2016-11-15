@@ -37,3 +37,14 @@
 3、maven 安装jar包到本地仓库
     mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=jar包路径
       </plugin>
+
+3、mavan安装本地jar包
+ mvn install:install-file -Dfile=jar包的位置 -DgroupId=上面的groupId -DartifactId=上面的artifactId -Dversion=上面的version -Dpackaging=jar
+
+4、sbt引用本地jar包
+  sbt 会搜索你的本地 Maven 仓库如果你将它添加为一个仓库：
+
+resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository" 
+ 如maven库位置为/homw/scc/则resolvers += "Local Maven Repository" at "file:///home/scc/.m2/repository"
+为了方便期间，可以写作
+resolvers += Resolver.mavenLocal 
