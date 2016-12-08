@@ -8,3 +8,9 @@
 
 2、对于不需要打包进jar的依赖包，可以使用provided，如：
   "org.apache.spark" %% "spark-core" % "0.8.0-incubating" % "provided"
+
+3、sbt打包存在bug，依赖的包无法打入目标jar包。
+  解决方案：
+   （1） 添加sbt-assembly插件
+         在./sbt/0.13/plugins/plugins.sbt文件中添加：addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.3")
+   （2） 在目标工程中运行sbt assembly
