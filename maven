@@ -48,3 +48,23 @@ resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/
  如maven库位置为/homw/scc/则resolvers += "Local Maven Repository" at "file:///home/scc/.m2/repository"
 为了方便期间，可以写作
 resolvers += Resolver.mavenLocal 
+
+5、maven打的jar包缺少依赖的lib
+    如果直接maven package 打包无法将依赖的jar包包含进目标包里面，则可以使用maven的插件maven-shade-plugin来打包
+    <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
