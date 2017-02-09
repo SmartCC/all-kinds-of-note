@@ -180,3 +180,12 @@
 	  (double-array [1 2 3 4]))
 
     如果参数类型为别别的数组，如Object[]、String[]，则类型我"[Ljava.lang.Object;"、"[Ljava.lang.String;"。methods后边为:methods [[testGen [] "[java.lang.Ojbect;"]]
+
+27.lein 运行工程中指定的类
+    lein run -m 类名
+28、clojure操作Java类是doto和..的区别
+    doto是讲第一个参数重复分配给其后的每一个变量，最后还是返回第一个参数。如(doto (new java.util.HashMap) (.put "a" 1) (.put "b" 2))，最后返回的还是Map。
+    ..类似于->宏，只是省略了函数之前的.而已。如(-> (A.) (.getA) (.tranfer)) 与(.. (A.) (getA) (tranfer))是等价的。
+
+29、clojure引用内部类
+    引用内部类的时候在主类之前加上$符，如Java中的java.util.Map.Entry，clojure中为java.util.Map$Entry。另外，如果内部类已经import了，在用的时候也要带上之前的主类，如(Map$Entry.)，不能直接使用(Entry.)。

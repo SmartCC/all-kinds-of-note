@@ -24,3 +24,6 @@
 	(require 'neotree)
 	;设置快捷键
 	(global-set-key [f8] 'neotree-toggle)
+
+10、emacs下载包慢
+	使用emacs的国内镜像，具体配置可参见：http://elpa.emacs-china.org/

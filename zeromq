@@ -1,0 +1,3 @@
+1、使用autogen自动生成配置时出现"possibly undefined macro: AC_LIBTOOL_WIN32_DLL"问题
+解决方案：
+    安装Libtool库。
