@@ -179,7 +179,7 @@
 	  [this]
 	  (double-array [1 2 3 4]))
 
-    如果参数类型为别别的数组，如Object[]、String[]，则类型我"[Ljava.lang.Object;"、"[Ljava.lang.String;"。methods后边为:methods [[testGen [] "[java.lang.Ojbect;"]]
+    如果参数类型为别的数组，如Object[]、String[]，则类型我"[Ljava.lang.Object;"、"[Ljava.lang.String;"。methods后边为:methods [[testGen [] "[java.lang.Ojbect;"]]
 
 27.lein 运行工程中指定的类
     lein run -m 类名
@@ -189,3 +189,9 @@
 
 29、clojure引用内部类
     引用内部类的时候在主类之前加上$符，如Java中的java.util.Map.Entry，clojure中为java.util.Map$Entry。另外，如果内部类已经import了，在用的时候也要带上之前的主类，如(Map$Entry.)，不能直接使用(Entry.)。
+
+30、clojure使用java函数
+    clojure在使用Java函数时，可以使用memfn宏，能将java函数转换我类似于clojure的函数（即不需要再在函数前加.号），如：(.toString 1) 与((memfn toString) 1)等价。这个宏主要是通过用来与clojre风格保持一致，如(def to-string (memfn toString))，以后在程序里可以直接使用to-string函数，而不必使用.toSring函数了。
+
+31、apply初始化构造函数
+    如使用deftype或者defrecord新定义了一个类A，希望使用apply初始化这个函数，如果直接使用(apply A. [...])是错误的。但是clojure定义类的是，默认定义了->MyType的工厂函数，可以直接使用(apply ->A [...])。同理，还有使用map->MyType的工厂函数。
