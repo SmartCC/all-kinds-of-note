@@ -1,0 +1,14 @@
+1、INDArray合并
+    INDArray无法直接合并，但是可以使用DataSet合并。步骤为：
+    (1)创建一个DataSet链表，List<DataSet> dataSetList = new ArrayList<DataSet>();
+    (2) 将INDArray构建DataSet，然后添加到各个列表中dataSetList.add(...);
+    (3)使用DataSet.merge合并
+
+2、计算INDArray的行和列的和
+   使用.sum函数，参数0表示按列统计，1表示按列统计。
+
+3、TfidfVectorizer里边参数的含义
+   numWordsEncountered : 总词数，总共有多少词
+   stopWords貌似不起作用？？？
+   获取词向量的长度 vectorizer.getVocabCache().words().numWords()
+

@@ -1,5 +1,0 @@
-1、clojure载入文件
-    如载入的文件名为test.clj，运行命令(require 'test),不用加文件的扩展名。如果文件有命名空间，则需要依据目录一次引用。如：com.mycompany.foo命名空间对应的代码在com/mycompany/foo.cjl文件里。载入时使用(require 'com.mycompany.foo)命令
-
-2、clojure一个文件对应一个命名空间
-

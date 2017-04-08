@@ -195,3 +195,27 @@
 
 31、apply初始化构造函数
     如使用deftype或者defrecord新定义了一个类A，希望使用apply初始化这个函数，如果直接使用(apply A. [...])是错误的。但是clojure定义类的是，默认定义了->MyType的工厂函数，可以直接使用(apply ->A [...])。同理，还有使用map->MyType的工厂函数。
+
+32、对于多个if判断的情况，可以使用cond函数处理。
+
+32、对序列进行分组可以使用partition函数，包括partition、partition-all、partiton-by。
+    如(partition 2 (range 8))运行结果为:
+	((0 1) (2 3) (4 5) (6 7))。
+
+33、clojure中的字符。
+    clojure的字符表示形式为\a ，而不是'a'。后者因为'好是引述，故'a'为symbol。
+
+34、gen-class中继承的类或接口函数导出发生ClassFormatError: Duplicate method name&signature错误。
+    继承的即可或函数不需要导出，如果时候呀:methods导出，会造成函数重复错误。
+
+35、clojure读写文件
+    slurp读取文件
+    spit写文件
+
+36、cycle函数可以循环一个序列，形成一个惰性序列。用途：
+    如map是安装短序列的长度计算的
+	user=> (map + (range 8) (range 3))
+	(0 2 4)
+    如果想按长序列计算，后边的循环补全：
+	user=> (map + (range 8) (cycle (range 3)))
+	(0 2 4 3 5 7 6 8)
