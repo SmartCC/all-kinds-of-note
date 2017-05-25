@@ -1,0 +1,5 @@
+1、外部网络访问kafka
+    外部网络访问kafka需要修改文件的三个配置：
+	listeners=PLAINTEXT://0.0.0.0:9092，配置kafka监听所以网络
+	host.name=内部网络ip ，使broker指向正确的网卡地址。指定host.name让broker之间通信使用内部网络
+	advertised.host.name=主机ip，远程客户端和broker通信的时候指向正确的主机

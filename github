@@ -1,16 +1,15 @@
+1、配置当前项目的用户名和邮箱
+	在当前的工程下回有一个.git目录，其中的config文件即为当前工程的配置文件。修改其中的配置项即可。
+	配置项格式为：
+	[一级]
+		二级 = 配置内容
+	如配置用户名和邮箱为:
+	[user]
+		name = 用户名
+		email = 邮箱
 
-git config --global user.name "shaochunchang"
-git config --global user.email "shaochunchang@rd.tuan800.com"
-
-echo "# 4clojure-answers" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/SmartCC/4clojure-answers.git
-git push -u origin master
-如果推送出现：提示：更新被拒绝，因为您当前分支的最新提交落后于其对应的远程分支
-则使用命令：
-git push -u origin +master
-
-git同步远程服务器代码
-git pull
+2、git移除提交的文件不移除原来的文件
+	 使用：git rm -r -n <文件/文件夹> 可以从文件的提交列表中移除文件，而不删除原文件。
+	意义如下：
+		-r  递归移除目录。
+		 -n：加上这个参数，执行命令时，是不会删除任何文件，而是展示此命令要删除的文件列表预览，所以一般用这个参数先看看要删除哪些文件，防止误删，确认之后，就去掉此参数，真正的删除文件。 
