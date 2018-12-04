@@ -1,0 +1,4 @@
+1、安装
+    (1)使用brew安装。安装目录为：/usr/local/Cellar/opencv/
+    (2)将其中的python依赖的包路径条件到python的默认路径中，即在/usr/local/lib/python3.6/site-packages/.pth文件中添加/usr/local/Cellar/opencv/3.3.0_3/lib/python3.6
+    (3)brew卸载numpy。brew在安装opencv的时候会安装numpy，目录为/User/local/Cellar/numpy。在安装的时候，会改变python的默认调用numpy的路径。此版本的numpy会与pip安装的冲突。使用brew uninstall --ignore-dependencies numpy命令卸载此numpy。然后pip卸载numpy，在重新安装numpy.

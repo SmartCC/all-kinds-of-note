@@ -1,0 +1,52 @@
+1、tensorflow的数据结构分为Tensor和SparseTensor，Tensor是正常的向量结构，SparseTensor是处理稀疏向量的。
+
+2、tensorflow中调整图像大小的函数为：tf.image.resize_images(img, [new_height, new_width], method=)。其中，method为调整大小的算法，具体对应为：
+	0	tf.image.ResizeMethod.BILINEAR		双线性插值法
+	1	tf.image.ResizeMethod.NEAREST_NEIGHBOR	最近邻居法
+	2	tf.image.ResizeMethod.BICUBIC		双三差值法
+	3	tf.image.ResizeMethod.AREA		面积差值法
+	实际函数使用中，可以直接使用前面的编号取值，有可以使用tf.image.ResizeMethod.*。tf.image.resize_images(img, method=0)和tf.image.resize_images(img, method=tf.image.ResizeMethod.BILINEAR)表示的是一个意思。
+
+3、tensorflow提供了对图像进行剪裁和填充的函数，tf.image.resize_image_with_crop_or_pad。第一个参数为原始图像，第二三个参数为调整后目标的大小。如果目标图像大于这个数值，则自动截取原始图像中居中的部分。如果目标图像大于原始图像，则原始图像的四周填充全为0的背景。
+
+4、tensorflow支持通过比例裁减图像，tf.image.central_crop。第一个参数为原始图像，第二个参数为0到1的实数，表示调整后的比例。注意，此函数只支持裁减，不支持填充，第二个参数不能大于1。
+
+5、tensorflow也支持裁减和填充任意区域的图像（前面的图像函数都是对图像的中心区域进行操作）。tf.image.crop_to_bounding_box和tf.image.pad_to_bounding_box。bounding box是限定框。
+
+6、在TfRecord中,tf.train.Features中创建的feature是一个字典类型，读取和创建过程中可以熟悉不同，但是字段的类型必须相同。
+
+7、raw指的是原始图像文件
+
+8、tensorflow还提供了调整图像亮度、对比度、色相、饱和度和标准化的函数。
+	调整图像亮度
+    	adjusted = tf.image.adjust_brightness(img_data, -0.5)
+    	在第二个参数指定的范围内随机调整图像的亮度
+    	adjusted = tf.image.random_brightness(img_data,0.5)
+
+    	调整图像的对比度
+    	adjusted = tf.image.adjust_contrast(img_data, -5)
+    	adjusted = tf.image.random_contrast(img_data, -3,5)
+
+    	调整图像的色相
+    	adjusted = tf.image.adjust_hue(img_data, 0.1)
+
+    	在随机范围内调整色相
+    	adjusted = tf.image.random_hue(img_data, 0.5)
+
+    	调整图像饱和度
+    	adjusted = tf.image.adjust_saturation(img_data, -5)
+
+    	随机调整图像饱和度
+    	adjusted = tf.image.random_saturation(img_data, -3,5)
+
+    	图像标准化，即将图像三维矩阵中的数字均值变为0， 方差变为1。
+    	adjusted = tf.image.per_image_standardization(img_data)
+
+9、tensorflow可以在图片上标出限定框，tf.image.draw_bounding_boxes(images,boxes,name=None)。
+	images：是 [batch, height, width, depth] 形状的四维矩阵，数据类型为 float32、half 中的一种，第一个值batch是因为处理的是一组图片。
+	boxes： 形状 [batch, num_bounding_boxes, 4] 的三维矩阵， num_bounding_boxes 是标注框的数量，标注框由四个数字标示 [y_min, x_min, y_max, x_max]，数组类型为float32。***此外，boxes指的是图片的相对百分比位置，与具体的像素无关。***
+	name：操作的名称（可选）。
+	图像框的数据如果知道开始和结束位置，可以通过tf.slice对图像进行截取。
+
+10、tensorflow的resize_images函数接收的参数类型为tf.float32。而图像解码处理的格式为tf.uint32。有些书中会存在先转换大小，再转换类型，这样会造成错误。
+

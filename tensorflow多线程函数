@@ -1,0 +1,6 @@
+1、tf.train.match_filenames_once函数的初始化，只能使用local_varialbles_initializer，使用global_varialbles_initializer无法初始化，原因可能是match_filenames需要对应到本地的文件，是一个本地变量。
+
+2、将单个样例组合成batch.
+	tf.train.batch和tf.train.shuffle_batch 多线程依次读取每个文件，每次都是加载一个文件，多线程读取不同的部分。
+	tf.train.batch_join和tf.train.shuffle_batch_join 多线程读取多个文件，每个线程对应不同的文件（如果线程数多于文件数，会出现多个线程读取同一个文件的情况）
+

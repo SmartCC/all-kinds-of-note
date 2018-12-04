@@ -1,0 +1,12 @@
+问题：
+    word2vec的官方文档有误（可能是版本对应的问题），官方的文中获取include的命令为tf.sysconfig.get_compile_flags()，获取lib目录的命令为tf.sysconfig.get_link_flags()。1.4版本中对应的为tf.sysconfig.get_include()和tf.sysconfig.get_lib()。
+    官方文档是直接将include目录和lib目录写入了g++的编译过程，实际测试有问题，我使用的是配置环境变量的方式。
+
+环境变量：
+    export CPLUS_INCLUDE_PATH=/usr/local/lib/python3.6/site-packages/tensorflow/include:/usr/local/lib/python3.6/site-packages/tensorflow/include/external/nsync/public/:$CPLUS_INCLUDE_PATH   (一定要将变量export,否则环境变量无法生效,后面添加的目录是编译的时候需要nsync扩展的支持，不配置会找不到c++头文件)
+    export LIBRARY_PATH=/usr/local/lib/python3.6/site-packages/tensorflow:$LIBRARY_PATH (配置库文件目录，编译需要libtensorflow_framework.so
+
+编译：
+    g++ -std=c++11 -shared word2vec_ops.cc word2vec_kernels.cc -o word2vec_ops.so -fPIC -O2 -D_GLIBCXX_USE_CXX11_ABI=0
+    不要写成：g++ -std=c++11 -shared word2vec_ops.cc word2vec_kernels.cc -o word2vec_ops.so -fPIC ${TF_CFLAGS} ${TF_LFLAGS} -O2 -D_GLIBCXX_USE_CXX11_ABI=0，因为TF_LFLAGS会被看成是命令（可能是官网写错了，个人猜测可能是-I${TF_CFLAGS} L${TF_LFLAGS}，此方法已经试过了，编译错误）。
+    Mac电脑编译需要添加-undefined dynamic_lookup

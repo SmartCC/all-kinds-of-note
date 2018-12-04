@@ -1,0 +1,23 @@
+1、tensorflow的变量存储有两种方式，一种是使用tf.train.Saver，另一种是使用tf.saved_model.builder.SavedModelBuilder。
+	Saver主要是用来保存的变量，可以保存全部的变量（Saver初始化函数不添加任何参数），也可以保存指定的变量（Saver指定保存的变量）。例子：
+		saver = tf.train.Saver() #保存全部变量
+		saver = tf.train.Saver({"my_v2":v2}) #保存变量v2，且变量名为my_v2。
+		保存命令为：
+		saver.save(session, 文件名， 后缀）#后缀可以为同一个变量的不同迭代次数产生不同的问题件名
+		变量加载命令：
+		saver.restore(seesion, 文件名）
+	
+	SavedModelBuilder可以保存整个运行环境。saved_model模块主要用于TensorFlow Serving。TF Serving是一个将训练好的模型部署至生产环境的系统，主要的优点在于可以保持Server端与API不变的情况下。例子：
+		builder = tf.saved_model.builder.SavedModelBuilder(saved_model_dir)
+		builder.add_meta_graph_and_variables(sess, ['tag_string'])
+		builder.save()
+		第二个参数是给当前需要保存的meta graph一个标签，标签名可以自定义，在之后载入模型的时候，需要根据这个标签名去查找对应的MetaGraphDef，找不到就会报如RuntimeError: MetaGraphDef associated with tags 'foo' could not be found in SavedModel这样的错。标签也可以选用系统定义好的参数，如tf.saved_model.tag_constants.SERVING与tf.saved_model.tag_constants.TRAINING。
+
+		save方法就是将模型序列化到指定目录底下。
+
+		保存好以后到saved_model_dir目录下，会有一个saved_model.pb文件以及variables文件夹。顾名思义，variables保存所有变量，saved_model.pb用于保存模型结构等信息。
+		加载：
+		meta_graph_def = tf.saved_model.loader.load(sess, ['tag_string'], saved_model_dir)
+		load完以后，也是从sess对应的graph中获取需要的tensor来inference。如：
+		x = sess.graph.get_tensor_by_name('input_x:0')
+		y = sess.graph.get_tensor_by_name('predict_y:0')

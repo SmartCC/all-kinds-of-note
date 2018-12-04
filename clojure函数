@@ -248,3 +248,18 @@
     ~@ 反引述，并在完成后去掉括号
     ; 单行注释
     \ 字符，clojure中的字符需要以\开头，java中的''类型在clojure中为引述。如\x表示字符x,'x'表示为x'的引述。
+
+40、标准输出和标注错误输出
+    *out*和*err*是动态绑定的var，正常情况下clojure的打印函数都是使用*out*作为输出的，如果要使用*err*，可以把输出绑定到错误输出上。如：
+    (do
+    (println "标准输出1")
+    (binding [*out* *err*]
+             (println "错误流输出1"))
+    (println "标准输出2"))
+    第一行和第三行是标准输出，第二行是标准错误输出。binding不对外部的变量产生作用，只在自己的定义域内产生作用。
+
+41、java中含有可变参数函数的clojure调用。
+    java中的可变参数在实际的函数中被当做是数组使用，在clojure中调用的时候，直接将参数写到函数后面会报错，因为类型无法匹配。如果想要调用，可以使用下面几个方法：
+	1、使用to-array函数，将可变的参数变成java数组
+	2、使用list和vector封装可变的参数，不能直接使用[]、'()方法。
+    例子：如某个类A的java函数为 void test(Object ...args)。调用的话可以使用(.test A (to-array [a b c])) 或者 (.test A (list a b c)) 或者(.test A (vector a b c))。

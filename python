@@ -1,3 +1,10 @@
 1、python安装esay_install后，如果出现找不到python.h的情况，需要安装python2.x-dev
 
 2、easy_install安装时，可能会出现没有创建文件的权限的情况。可以使用sudo指令来解决
+
+3、配置包路径。有些包没有在Python的安装路径里，需要自己配置路径。方法是在site-packages里建一个.pth的文件，将包的路径写到里边。
+每行一个路径。
+
+4、mac下python的包安装路径/usr/local/lib/
+
+5、查看Python变量类型，type()函数。

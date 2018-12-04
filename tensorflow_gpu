@@ -1,0 +1,16 @@
+1、tensorflow在使用GPU时，默认占用所有GPU的显存。解决的方法有两个：
+	（1）在构造tf.Session()时候通过传递tf.GPUOptions作为可选配置参数的一部分来显式地指定需要分配的显存比例。如：
+	gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.333)
+	sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+	per_process_gpu_memory_fraction指定了每个GPU进程中使用显存的上限，但它只能均匀作用于所有GPU，无法对不同GPU设置不同的上限。
+	（2）动态分配：
+	config = tf.ConfigProto()
+	config.gpu_options.allow_growth=True
+	sess = tf.Session(config=config)
+	当allow_growth设置为True时，分配器将不会指定所有的GPU内存，而是根据需求增长。使用allow_growth option，刚一开始分配少量的GPU容量，然后按需慢慢的增加，由于不会释放内存，所以会导致碎片
+
+2、指定GPU，使用环境变量CUDA_VISIBLE_DEVICES，如：
+	export CUDA_VISIBLE_DEVICES=0,1
+	#或者在 程序开头
+	os.environ['CUDA_VISIBLE_DEVICES'] = '0' #使用 GPU 0
+	os.environ['CUDA_VISIBLE_DEVICES'] = '0,1' # 使用 GPU 0，1

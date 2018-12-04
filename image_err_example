@@ -1,0 +1,13 @@
+1、灰度gif图解析出来只有三个通道，彩色的有四个通道
+示例：005M94J9ly4fxgxd3a7nbg301e00umwy
+也有可能是两个通过
+示例：006VbUxZgy1ftgl0qupg5g30dw09udrx
+
+2、截断图像读取错误。很多网络上的图片存在截断的问题，直接使用tensorflow自带的opencv解析图片或出现错误。
+示例：
+解决方案：使用PIL及其相关扩展解析图片，设置允许读截断的图片。
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+io.imread('...')
