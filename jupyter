@@ -1,0 +1,5 @@
+1、运行jupyter时出现ImportError: cannot import name 'create_prompt_application' 错误
+原因：
+	prompt-toolkit版本不对，安装jupyter的时候给自动升级成了最新的版本。
+解决方案：
+	将prompt-tookkit换回之前的版本。pip3 install prompt-toolkit==1.0.15
