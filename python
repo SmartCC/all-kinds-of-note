@@ -5,6 +5,6 @@
 3、配置包路径。有些包没有在Python的安装路径里，需要自己配置路径。方法是在site-packages里建一个.pth的文件，将包的路径写到里边。
 每行一个路径。
 
-4、mac下python的包安装路径/usr/local/lib/
+4、mac下python的包安装路径/usr/local/lib, centos下的安装包路径为：/usr/lib//
 
 5、查看Python变量类型，type()函数。

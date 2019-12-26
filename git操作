@@ -1,0 +1,6 @@
+1、Git branch -r 无法获取远程分支，ui可以看见分支但是git 命令无法查看
+	原因：
+		git branch -r 并不是每一次都从远程更新仓库信息，主要是出于git效率的考虑，因此没法发现最新的分支。
+	解决方案：
+		git fetch origin 更新仓库即可
+		git branch -a 查看所有远程分支

@@ -21,3 +21,32 @@
 		load完以后，也是从sess对应的graph中获取需要的tensor来inference。如：
 		x = sess.graph.get_tensor_by_name('input_x:0')
 		y = sess.graph.get_tensor_by_name('predict_y:0')
+2、模型保存为pb文件
+    from tensorflow.python.framework import graph_util
+    constant_graph = graph_util.convert_variables_to_constants(sess, sess.graph_def, ['porn/predictions','extre/softmax'])
+
+3、pb模型读入
+def import_groph_from_pb(tf_graph, pd_path, extre_name):
+    with tf_graph.as_default():
+        with tf.gfile.FastGFile(pd_path, 'rb') as file:
+            graph_def = tf.GraphDef()
+            graph_def.ParseFromString(file.read())
+            tf.import_graph_def(graph_def, name=extre_name)
+
+4、pb 转为可读的pbtxt
+        tf.train.write_graph(graph_def, './', 'protobuf.pbtxt', as_text=True)
+	其中，as_text为True表示以文本的形式写入
+
+5、pbtxt模型读入
+import tensorflow as tf
+from tensorflow.core.framework import graph_pb2 as gpb
+from google.protobuf import text_format as pbtf
+
+gdef = gpb.GraphDef()
+
+with open('my-graph.pbtxt', 'r') as fh:
+    graph_str = fh.read()
+
+pbtf.Parse(graph_str, gdef)
+
+tf.import_graph_def(gdef, name=extre_name) #extre_name可以在图之前添加一个命名空间，方便进行拓扑管理

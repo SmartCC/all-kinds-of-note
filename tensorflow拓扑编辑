@@ -1,0 +1,8 @@
+1、使用tensorflow提供的工具编辑
+	import tensorflow as tf
+	from tensorflow.contrib import graph_editor as ge
+
+	ge.swap_inputs(origin_sub,[origin_y, resize1])
+	等同于修改pb文件里的inputs项
+
+2、直接修改pbtxt文件，pb文件保存以及转pbtxt参见tenrlowflow模型保存的笔记

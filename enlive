@@ -4,8 +4,11 @@
 
 	user> (sniptest "<p class=\"\"><a href=\"\" class=\"\"></a></p>" [:p (attr? :class)] (content "XXX"))
 	"<p class=\"\"><a href=\"\" class=\"\">XXX</a></p>"
+	意思就是：如果加了中括号，就在同一个层次找，如果不加中括号，就会认为是下一层的属性，依次前往下一层。因此，要把同一层的内容打包
 
 2、使用select选择相应的节点，格式为(select node-or-nodes 选择器）
 
 3、使用pred和zip-pred创建高阶函数来定义自己的选择器。
     选择器返回值为boolen类型，返回true通过选择，false不通过
+
+4、enlive的选择器和css的一样。

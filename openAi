@@ -1,0 +1,2 @@
+brew install boost boost-python swig
+pip3 install --upgrade gym

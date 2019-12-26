@@ -1,0 +1,2 @@
+1、ImportError: cannot import name '_validate_lengths'
+	numpy的版本太高了，降低版本

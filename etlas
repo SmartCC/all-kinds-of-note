@@ -1,0 +1,6 @@
+1、etlas 打包jar，包含etlas自带的jar包
+    etlas clean
+    etlas configure --enable-uberjar-mode # Needs to be done once
+    etlas build # You will now have an uberjar 
+
+2、etlas的main函数在eta.main类里

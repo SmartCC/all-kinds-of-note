@@ -1,0 +1,6 @@
+1、skimage是调用外部插件进行输入输出的，查看可用插件：
+	io.find_available_plugins()
+	其中自动加载的插件为matplotlib和pil：
+	io.find_available_plugins(loaded=True)
+	查看官方文档的函数说明（version 0.13):skimage.io.imread(fname,as_grey=False, plugin=None, flatten=None, **plugin_args)
+	其中plugin参数的解释为：Name of plugin to use. By default, the different plugins are tried (starting with the Python Imaging Library) until a suitable candidate is found. 即指定调用函数的插件（注意在matplotlib和pil中都包含imread函数），当未指定时，从Python Imaging Library，即PIL开始，依次尝试调用函数。

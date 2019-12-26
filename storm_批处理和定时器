@@ -1,0 +1,135 @@
+storm 批处理（窗口）
+
+一、Storm
+Storm是一个实时的可靠地分布式流计算框架。一个典型的大数据实时计算应用场景：从Kafka消息队列读取消息（可以是logs,clicks,sensor data）；通过Storm对消息进行计算聚合等预处理；把处理结果持久化到数据库或者HDFS做进一步深入分析。 Storm中分为Topology开发和Trident开发，Trident是一种高度抽象的实时计算模型，是一种有状态的流式处理框架，而Topology是一种无状态流式处理框架。
+
+Topology特点：
+无状态
+低延迟
+开启ack后保证tuple至少一次处理
+Trident特点：
+有状态
+批处理
+提供有且只有一次的处理语义
+选择策略：
+若需要有且只有一次的批处理统计则选择Trident，其他情况使用Topology即可满足。
+
+二、批处理策略
+对消息预聚合时，通常是将多个tuple的计算结果存储到数据库中，即批处理的概念。使用Storm来进行批处理大概有三种方案：Trident API、Storm windowing、自定义批处理 （如利用TickTuple）。
+
+    Trident API
+    1.1 基本概念
+    Trident从概念上就是以Batch为处理单元，是天然的批处理方案。Tident提供了 joins（数据流融合）, aggregations（聚合）, grouping（分组）, functions（自定义函数）, 以及 filters（过滤）等功能。除此之外，Trident 还提供了一些专门的原语，从而在基于数据库或者其他存储的前提下来应付有状态的递增式处理。但由于存储了状态信息，性能相比Topology有所下降。
+
+例子：https://github.com/apache/storm/tree/master/examples/storm-starter/src/jvm/org/apache/storm/starter/trident
+
+    Storm Windowing
+    2.1 基本概念
+    Storm抽象出窗口处理的概念，使得开发者可以很方便的做一些统计计算。Storm支持用户每隔一段时间(Sliding interval)集中处理落在相同窗口(Window length，可以是时间段也可以tuple数量)下的所有tuples（一个窗口为一个批）。
+
+    目前有两种窗口抽象：
+    Tumbling Window ： Sliding interval = Window length 这就使得一个tuple只属于一个窗口。
+    Sliding Window ： Sliding interval <> Window length 这就使得一个tuple可能属于多个窗口。
+    2.2 使用方法
+    window举例
+    ```
+    public class SlidingWindowBolt extends BaseWindowedBolt {
+    private OutputCollector collector;
+
+    // 接受tuple前调用
+    @Override
+    public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+    this.collector = collector;
+    }
+
+    // 在每一次窗口激活后调用，如到达用户时间间隔或者满足tuple数量
+    @Override
+    public void execute(TupleWindow inputWindow) {
+    for(Tuple tuple: inputWindow.get()) {
+    // do the windowing computation
+    ...
+    }
+    // emit the results
+    collector.emit(new Values(computedValue));
+    }
+
+    // 在bolt销毁前调用
+    @Override
+    public void cleanup();
+    }
+
+public static void main(String[] args) {
+TopologyBuilder builder = new TopologyBuilder();
+builder.setSpout("spout", new RandomSentenceSpout(), 1);
+builder.setBolt("slidingwindowbolt",
+new SlidingWindowBolt().withWindow(new Count(30), new Count(10)),
+1).shuffleGrouping("spout"); // 设置窗口的Sliding interval 和 Window length
+Config conf = new Config();
+conf.setDebug(true);
+conf.setNumWorkers(1);
+
+StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
+
+}
+
+3. 使用TickTuple
+3.1 基本概念
+    Storm中内置了一种定时机制Tick，它能够让任何Bolt的所有task每隔一段时间（精确到秒级，用户可以自定义）收到一个来自_systemd的_tick stream的tick tuple，bolt收到这样的tuple后可以根据业务需求完成相应的处理。可以为某个Bolt单独设置Tick也可以为所有Bolt设置全局的Tick。若在未收到Tick之前Bolt存储数据（或简单处理），收到Tick后对存储的数据集中处理（或者这段时间处理的tuple结果做处理），即实现了批处理的功能。
+
+3.2 使用方法
+     为Bolt单独设置Tick：若希望某个bolt每隔一段时间做一些操作，那么可以将bolt继承BaseBasicBolt/BaseRichBolt，并重写getComponentConfiguration()方法。在方法中设置Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS的值，单位是秒。getComponentConfiguration()是backtype.storm.topology.IComponent接口中定义的方法，在此方法的实现中可以定义以Topology开头的此bolt特定的Config。
+111
+Bolt Tick
+public class TickBolt extends BaseBasicBolt{
+ 
+    @Override
+    public void execute(Tuple tuple, BasicOutputCollector collector) {
+        if (isTick(tuple)) { 
+            // 接收到Tick后的操作
+        } else {
+            // 接收到业务tuple后的操作
+        }
+    }
+ 
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    }
+ 
+    //设置10秒发送一次tick心跳
+    @SuppressWarnings("static-access")
+    @Override
+    public Map<String, Object> getComponentConfiguration() {
+        Config conf = new Config();
+        conf.put(conf.TOPOLOGY_TICK_TUPLE_FREQ_SECS, 10);
+        return conf;
+    }
+ 
+    // 判断tuple是否是TickTuple
+    public boolean isTick(Tuple tuple) {
+        return tuple != null
+                && Constants.SYSTEM_COMPONENT_ID.equals(tuple.getSourceComponent())
+                && Constants.SYSTEM_TICK_STREAM_ID.equals(tuple.getSourceStreamId());
+    }
+}
+ 
+
+若希望Topology中的每个bolt都每隔一段时间做一些操作，那么可以定义一个Topology全局的tick，同样是设置Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS的值： 
+
+    Topology Tick
+    Config conf = new Config();
+    conf.put(conf.TOPOLOGY_TICK_TUPLE_FREQ_SECS, 10);
+    StormSubmitter.submitTopology(topologyName,conf, topology.build()); 
+
+3.3 tick设置的优先级
+与Linux中的环境变量的优先级类似，storm中的tick也有优先级，即全局tick的作用域是全局bolt，但对每个bolt其优先级低于此bolt定义的tick。这个参数的名字TOPOLOGY_TICK_TUPLE_FREQ_SECS具有一定的迷惑性，一眼看上去应该是Topology全局的，但实际上每个bolt也可以自己定义。
+
+3.4 tick的精确度
+Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS是精确到秒级的。例如某bolt设置Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS为10s，理论上说bolt的每个task应该每个10s收到一个tick tuple。实际测试发现，这个时间间隔的精确性是很高的，一般延迟（而不是提前）时间在1ms左右。
+
+3.5 storm tick的实现原理
+在bolt中的getComponentConfiguration()定义了该bolt的特定的配置后，storm框架会在TopologyBuilder.setBolt()方法中调用bolt的getComponentConfiguration()方法，从而设置该bolt的配置。
+
+调用路径为：TopologyBuilder.setBolt() —> TopologyBuilder.initCommon() —> getComponentConfiguration()
+
+4 总结
+实现批处理的方案多种多样，各有各自的优点，若有“有且只有一次”的需求则使用Storm Trident，若需要更灵活的处理方式可以考虑Storm Windowing 或者自定义的批处理过程。当然Trident中也支持Windowing操作，组合方式也更具竞争性
