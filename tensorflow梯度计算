@@ -1,0 +1,13 @@
+1、tf.gradients(ys,xs,grad_ys, ...) 是tensorflow中求导的函数，求的是ys对xs的导数，故输出结果与xs的shape相同。grad_ys与ys相同，是链式法则的上一步。如果不是传入值，默认为1（函数的参数默认为None）.dxi = d/dy1*dy1/dxi+...+d/dyn*dyn/dxi。其中grad_ys传入的就是d/dyi的一步，即链式法则传入的上一步。
+
+2、compute_gradients(loss, var_list=var_list) 是gradients的升级，将变量名与变量相结合，与下列方式等价
+    trainable_variables = tf.trainable_variables() # 获取损失值对各个变量的偏导数之和，即梯度,大小len(input_data)
+    grads = tf.gradients(cost/tf.to_float(batch_size), trainable_variables) # 这里一般约束梯度，避免梯度爆炸，也可以不写。 
+    grads, _ = tf.clip_by_global_norm(grads, MAX_GRAD_NORM) # 打包梯度和变量的,结构是元
+    grads_and_vars = zip(grads, trainable_variables)
+
+3、tf.apply_gradients(grads_and_vars,global_step, name) 更新个变量的梯度
+    grads_and_vars是变量名和梯度,是一个字典类型，global_step是全局的step
+
+4、梯度裁减函数
+    tf.clip_by_value和tf.clip_by_norm和clip_by_global_norm
